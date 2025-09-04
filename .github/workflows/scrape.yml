@@ -12,113 +12,107 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 🔎 Debug : montre où on est et ce que contient la racine du repo
-      - name: Show workspace
+      - name: Show workspace (debug)
         run: |
           echo "PWD=$(pwd)"
           ls -la
-          echo "Git branch:"
+          echo "Branch:"
           git branch --show-current || true
 
-      # ✅ Si package.json n'existe pas, on bootstrappe le projet (évite l’ENOENT)
-      - name: Ensure Node project exists
+      - name: Ensure Node project exists + write script
         run: |
           if [ ! -f package.json ]; then
-            echo "No package.json found -> bootstrapping"
+            echo "No package.json -> bootstrap"
             npm init -y
             npm pkg set type=module
-            mkdir -p scripts
-            cat > scripts/scrape.mjs <<'EOF'
-import fs from "fs/promises";
-import path from "path";
-import axios from "axios";
-import { XMLParser } from "fast-xml-parser";
-import { chromium } from "playwright";
-
-const baseUrl = process.argv[2] || "https://www.pozza-maud-psy-angers.com/";
-const OUT_DIR = path.resolve("out");
-
-function urlToFilePath(urlStr) {
-  const u = new URL(urlStr);
-  let p = u.pathname;
-  if (!p || p === "/") p = "/index";
-  if (p.endsWith("/")) p = p + "index";
-  p = p.replace(/\/+/g, "/").replace(/[^a-zA-Z0-9/_-]/g, "-");
-  return path.join(OUT_DIR, p) + ".html";
-}
-
-async function getUrlsFromSitemap() {
-  try {
-    const { data } = await axios.get(new URL("/sitemap.xml", baseUrl).toString(), { timeout: 15000 });
-    const parser = new XMLParser({ ignoreAttributes: false });
-    const xml = parser.parse(data);
-    const nodes = xml.urlset?.url || [];
-    const urls = (Array.isArray(nodes) ? nodes : [nodes]).map(u => u.loc).filter(Boolean);
-    if (!urls.includes(baseUrl)) urls.unshift(baseUrl);
-    return urls;
-  } catch {
-    console.warn("Pas de sitemap.xml — on capture la home.");
-    return [baseUrl];
-  }
-}
-
-async function autoScroll(page) {
-  await page.evaluate(async () => {
-    await new Promise(resolve => {
-      let total = 0;
-      const dist = 600;
-      const timer = setInterval(() => {
-        const sh = document.body.scrollHeight;
-        window.scrollBy(0, dist);
-        total += dist;
-        if (total >= sh - window.innerHeight) { clearInterval(timer); resolve(); }
-      }, 200);
-    });
-  });
-}
-
-(async () => {
-  const urls = await getUrlsFromSitemap();
-  console.log(`Captures: ${urls.length} pages`);
-  const browser = await chromium.launch({ headless: true });
-  try {
-    for (const url of urls) {
-      console.log("→", url);
-      const page = await browser.newPage();
-      await page.goto(url, { waitUntil: "networkidle" });
-      await autoScroll(page);
-
-      // liens internes => relatifs
-      await page.evaluate((base) => {
-        for (const a of document.querySelectorAll("a[href]")) {
-          try {
-            const u = new URL(a.getAttribute("href"), base);
-            if (u.origin === location.origin) a.setAttribute("href", u.pathname + u.search + u.hash);
-          } catch {}
-        }
-      }, baseUrl);
-
-      const html = await page.content();
-      const filePath = urlToFilePath(url);
-      await fs.mkdir(path.dirname(filePath), { recursive: true });
-      await fs.writeFile(filePath, html, "utf8");
-      await page.close();
-    }
-  } finally {
-    await browser.close();
-  }
-  console.log(`✅ HTML rendu sauvegardé dans: ${OUT_DIR}`);
-})();
-EOF
-          else
-            echo "package.json found:"
-            cat package.json
           fi
+          mkdir -p scripts
+          cat > scripts/scrape.mjs <<'EOF'
+          import fs from "fs/promises";
+          import path from "path";
+          import axios from "axios";
+          import { XMLParser } from "fast-xml-parser";
+          import { chromium } from "playwright";
 
-      # ⬇️ Installe toujours les deps (sans npm ci pour éviter l’erreur de lockfile)
+          const baseUrl = process.argv[2] || "https://www.pozza-maud-psy-angers.com/";
+          const OUT_DIR = path.resolve("out");
+
+          function urlToFilePath(urlStr) {
+            const u = new URL(urlStr);
+            let p = u.pathname;
+            if (!p || p === "/") p = "/index";
+            if (p.endsWith("/")) p = p + "index";
+            p = p.replace(/\/+/g, "/").replace(/[^a-zA-Z0-9/_-]/g, "-");
+            return path.join(OUT_DIR, p) + ".html";
+          }
+
+          async function getUrlsFromSitemap() {
+            try {
+              const { data } = await axios.get(new URL("/sitemap.xml", baseUrl).toString(), { timeout: 15000 });
+              const parser = new XMLParser({ ignoreAttributes: false });
+              const xml = parser.parse(data);
+              const nodes = xml.urlset?.url || [];
+              const urls = (Array.isArray(nodes) ? nodes : [nodes]).map(u => u.loc).filter(Boolean);
+              if (!urls.includes(baseUrl)) urls.unshift(baseUrl);
+              return urls;
+            } catch {
+              console.warn("Pas de sitemap.xml — on capture la home.");
+              return [baseUrl];
+            }
+          }
+
+          async function autoScroll(page) {
+            await page.evaluate(async () => {
+              await new Promise(resolve => {
+                let total = 0;
+                const dist = 600;
+                const timer = setInterval(() => {
+                  const sh = document.body.scrollHeight;
+                  window.scrollBy(0, dist);
+                  total += dist;
+                  if (total >= sh - window.innerHeight) { clearInterval(timer); resolve(); }
+                }, 200);
+              });
+            });
+          }
+
+          (async () => {
+            const urls = await getUrlsFromSitemap();
+            console.log(`Captures: ${urls.length} pages`);
+            const browser = await chromium.launch({ headless: true });
+            try {
+              for (const url of urls) {
+                console.log("→", url);
+                const page = await browser.newPage();
+                await page.goto(url, { waitUntil: "networkidle" });
+                await autoScroll(page);
+
+                // liens internes => relatifs
+                await page.evaluate((base) => {
+                  for (const a of document.querySelectorAll("a[href]")) {
+                    try {
+                      const u = new URL(a.getAttribute("href"), base);
+                      if (u.origin === location.origin) a.setAttribute("href", u.pathname + u.search + u.hash);
+                    } catch {}
+                  }
+                }, baseUrl);
+
+                const html = await page.content();
+                const filePath = urlToFilePath(url);
+                await fs.mkdir(path.dirname(filePath), { recursive: true });
+                await fs.writeFile(filePath, html, "utf8");
+                await page.close();
+              }
+            } finally {
+              await browser.close();
+            }
+            console.log(`✅ HTML rendu sauvegardé dans: ${OUT_DIR}`);
+          })();
+          EOF
+
       - name: Install deps
         run: |
-          npm i axios fast-xml-parser glob playwright
+          npm i axios fast-xml-parser playwright
 
       - name: Run scrape
         run: node scripts/scrape.mjs "https://www.pozza-maud-psy-angers.com/"
