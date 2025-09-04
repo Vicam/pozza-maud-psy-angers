@@ -20,18 +20,48 @@ function urlToFilePath(urlStr) {
 }
 
 async function getUrlsFromSitemap() {
-  try {
-    const { data } = await axios.get(new URL("/sitemap.xml", baseUrl).toString(), { timeout: 15000 });
+  async function fetchSitemap(url) {
+    const { data } = await axios.get(url, { timeout: 15000 });
     const parser = new XMLParser({ ignoreAttributes: false });
-    const xml = parser.parse(data);
-    const nodes = xml.urlset?.url || [];
-    const urls = (Array.isArray(nodes) ? nodes : [nodes]).map(u => u.loc).filter(Boolean);
-    if (!urls.includes(baseUrl)) urls.unshift(baseUrl);
-    return urls;
-  } catch {
-    console.warn("Pas de sitemap.xml — on capture la home.");
-    return [baseUrl];
+    return parser.parse(data);
   }
+
+  const mainSitemapUrl = new URL("/sitemap.xml", baseUrl).toString();
+  const xml = await fetchSitemap(mainSitemapUrl);
+
+  let urls = [];
+
+  // Cas 1 : sitemap index
+  if (xml.sitemapindex?.sitemap) {
+    const sitemaps = Array.isArray(xml.sitemapindex.sitemap)
+      ? xml.sitemapindex.sitemap
+      : [xml.sitemapindex.sitemap];
+    for (const sm of sitemaps) {
+      if (sm.loc) {
+        try {
+          const childXml = await fetchSitemap(sm.loc);
+          const urlset = childXml.urlset?.url || [];
+          const childUrls = (Array.isArray(urlset) ? urlset : [urlset])
+            .map(u => u.loc)
+            .filter(Boolean);
+          urls.push(...childUrls);
+        } catch (e) {
+          console.warn("Erreur en lisant sous-sitemap:", sm.loc, e.message);
+        }
+      }
+    }
+  }
+
+  // Cas 2 : sitemap direct
+  if (xml.urlset?.url) {
+    const urlset = xml.urlset.url;
+    urls.push(...(Array.isArray(urlset) ? urlset : [urlset]).map(u => u.loc).filter(Boolean));
+  }
+
+  // Ajoute la home si absente
+  if (!urls.includes(baseUrl)) urls.unshift(baseUrl);
+
+  return urls;
 }
 
 async function autoScroll(page) {
