@@ -1,0 +1,32 @@
+name: Scrape Wix Snapshot
+
+on:
+  workflow_dispatch:   # permet de lancer manuellement
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.47.0-jammy
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install deps
+        run: npm ci || npm i
+
+      - name: Run scrape
+        run: node scripts/scrape.mjs "https://www.pozza-maud-psy-angers.com/"
+
+      - name: Upload artifact (download snapshot)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wix-snapshot
+          path: out/
+
+      - name: Commit snapshot into repo
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: snapshot Wix (Playwright)"
+          file_pattern: out/**
