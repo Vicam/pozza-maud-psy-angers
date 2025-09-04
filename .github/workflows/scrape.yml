@@ -123,6 +123,12 @@ jobs:
           name: wix-snapshot
           path: out/
 
+      - name: Configure git safe.directory
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Commit snapshot into repo
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
