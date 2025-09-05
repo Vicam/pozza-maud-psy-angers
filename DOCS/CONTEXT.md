@@ -1,6 +1,7 @@
 # Contexte du projet
 
 L'objectif de ce projet est de migrer le site Wix de Maud Pozza, psychologue à Angers, vers un site statique qui sera déployé sur Netlify.
+Ce site permet principalement d'expliquer l'activité de Maud et de donner les informations de contact et donner le lien pour prendre rendez vous sur l'agenda en ligne.
 
 **URL du site original :** https://www.pozza-maud-psy-angers.com/
 
