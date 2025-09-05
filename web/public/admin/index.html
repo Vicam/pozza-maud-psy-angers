@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex" />
     <title>Decap CMS</title>
 
-    <!-- 1) Normalise le hash (#/invite_token -> #invite_token) AVANT Identity -->
+    <!-- 0) Normaliser le hash (#/invite_token -> #invite_token) -->
     <script>
       (function () {
         var h = location.hash || "";
@@ -17,21 +17,56 @@
       })();
     </script>
 
-    <!-- 2) Netlify Identity (doit capter #invite_token / #recovery_token) -->
+    <!-- 1) Netlify Identity -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
-      if (window.netlifyIdentity) {
-        // Optionnel : rechargement après login/logout pour que Decap voie la session
-        netlifyIdentity.on("login", () => location.reload());
-        netlifyIdentity.on("logout", () => location.reload());
-        netlifyIdentity.init(); // déclenche la détection auto des tokens (#invite_token / #recovery_token)
-      }
+      (function () {
+        function extractToken() {
+          var h = location.hash || "";
+          // accepte #invite_token=... OU #/invite_token=... par sécurité
+          var m = h.match(/#\/?invite_token=([^&]+)/) || h.match(/#\/?recovery_token=([^&]+)/);
+          return m ? m[1] : null;
+        }
+
+        function handleToken() {
+          var token = extractToken();
+          if (!token || !window.netlifyIdentity) return;
+
+          // Invite ou Recovery ?
+          if (/#\/?invite_token=/.test(location.hash)) {
+            // Accepter l'invitation (définition du mot de passe)
+            try {
+              netlifyIdentity.acceptInvite(token);
+            } catch (e) {
+              console.warn("acceptInvite error:", e);
+            }
+          } else if (/#\/?recovery_token=/.test(location.hash)) {
+            // Réinitialisation du mot de passe
+            try {
+              netlifyIdentity.recover(token);
+            } catch (e) {
+              console.warn("recover error:", e);
+            }
+          }
+        }
+
+        if (window.netlifyIdentity) {
+          netlifyIdentity.on("init", handleToken);
+          // Ce reload garantit que Decap voit la session après login/logout
+          netlifyIdentity.on("login", () => location.reload());
+          netlifyIdentity.on("logout", () => location.reload());
+          netlifyIdentity.init();
+
+          // Sécurité : si l’event 'init' arrive trop tôt, relance dans un micro délai
+          setTimeout(handleToken, 50);
+        }
+      })();
     </script>
 
-    <!-- 3) Indique à Decap où est la config -->
+    <!-- 2) Indiquer à Decap où lire la config -->
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
 
-    <!-- 4) Decap CMS -->
+    <!-- 3) Charger Decap -->
     <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
   </head>
   <body></body>
