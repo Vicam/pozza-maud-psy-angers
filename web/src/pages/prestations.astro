@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getEntryBySlug } from 'astro:content';
+const page = await getEntryBySlug('pages', 'prestations');
+if (!page) throw new Error('Page prestations introuvable');
+const { Content } = await page.render();
+---
+<Layout title="Prestations — Maud Pozza, psychologue à Angers">
+  <article class="prose prose-slate max-w-none">
+    <h1 class="text-3xl font-semibold text-[#423560]">{page.data.title}</h1>
+    <Content />
+  </article>
+</Layout>

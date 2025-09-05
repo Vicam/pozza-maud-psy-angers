@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* Base tweaks */
+:root {
+  color-scheme: light;
+}
+
+/* Typography defaults for prose */
+.prose {
+  max-width: 65ch;
+}
+

@@ -1,0 +1,78 @@
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: 'chore(cms): create {{collection}} “{{slug}}”'
+    update: 'chore(cms): update {{collection}} “{{slug}}”'
+    delete: 'chore(cms): delete {{collection}} “{{slug}}”'
+    uploadMedia: 'chore(cms): upload “{{path}}”'
+    deleteMedia: 'chore(cms): delete “{{path}}”'
+
+local_backend: true
+
+media_folder: 'public/uploads'
+public_folder: '/uploads'
+
+site_url: '/'
+
+collections:
+  - name: 'pages'
+    label: 'Pages'
+    label_singular: 'Page'
+    files:
+      - label: 'Accueil'
+        name: 'accueil'
+        file: 'src/content/pages/accueil.md'
+        fields:
+          - {label: Titre, name: title, widget: string}
+          - {label: Description, name: description, widget: string, required: false}
+          - {label: Corps, name: body, widget: markdown}
+      - label: 'Prestations'
+        name: 'prestations'
+        file: 'src/content/pages/prestations.md'
+        fields:
+          - {label: Titre, name: title, widget: string}
+          - {label: Description, name: description, widget: string, required: false}
+          - {label: Corps, name: body, widget: markdown}
+      - label: 'Remboursement'
+        name: 'remboursement'
+        file: 'src/content/pages/remboursement.md'
+        fields:
+          - {label: Titre, name: title, widget: string}
+          - {label: Description, name: description, widget: string, required: false}
+          - {label: Corps, name: body, widget: markdown}
+
+  - name: 'blog'
+    label: 'Blog'
+    folder: 'src/content/blog'
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - {label: Titre, name: title, widget: string}
+      - {label: Description, name: description, widget: string, required: false}
+      - {label: Date, name: date, widget: datetime}
+      - {label: Catégorie, name: category, widget: string, required: false}
+      - {label: Vignette, name: thumbnail, widget: image, required: false}
+      - {label: Brouillon, name: draft, widget: boolean, required: false, default: false}
+      - {label: Corps, name: body, widget: markdown}
+
+  - name: 'settings'
+    label: 'Paramètres'
+    files:
+      - label: 'Paramètres généraux'
+        name: 'global'
+        file: 'src/content/settings/global.yml'
+        fields:
+          - {label: Adresse, name: address, widget: string, required: false}
+          - {label: Téléphone, name: phone, widget: string, required: false}
+          - {label: Email, name: email, widget: string, required: false}
+          - {label: Lien RDV, name: rdv_url, widget: string, required: false}
+          - label: Réseaux sociaux
+            name: socials
+            widget: object
+            collapsed: true
+            fields:
+              - {label: Facebook, name: facebook, widget: string, required: false}
+              - {label: Instagram, name: instagram, widget: string, required: false}
+              - {label: LinkedIn, name: linkedin, widget: string, required: false}
+

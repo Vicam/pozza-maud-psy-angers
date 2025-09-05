@@ -1,0 +1,29 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const categories = Array.from(new Set(posts.map((p) => p.data.category).filter(Boolean)));
+  return categories.map((category) => ({ params: { category } }));
+}
+
+const { category } = Astro.params;
+const posts = (await getCollection('blog', ({ data }) => data.category === category))
+  .sort((a, b) => +b.data.date - +a.data.date);
+---
+<Layout title={`Catégorie: ${category}`}>
+  <h1 class="text-3xl font-semibold text-[#423560] mb-6">Catégorie: {category}</h1>
+  {posts.length === 0 ? (
+    <p>Aucun article pour cette catégorie.</p>
+  ) : (
+    <ul class="space-y-4">
+      {posts.map((post) => (
+        <li class="border rounded-lg p-4">
+          <a href={`/blog/${post.slug}/`} class="text-[#6A559A] font-medium">{post.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  )}
+</Layout>
+

@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntryBySlug } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = await getEntryBySlug('blog', slug);
+if (!post) throw new Error(`Article introuvable: ${slug}`);
+const { Content } = await post.render();
+---
+<Layout title={`${post.data.title} — Blog`}>
+  <article class="prose prose-slate max-w-none">
+    <h1 class="text-3xl font-semibold text-[#423560]">{post.data.title}</h1>
+    <p class="text-sm text-gray-500">{new Date(post.data.date).toLocaleDateString('fr-FR')}</p>
+    <Content />
+  </article>
+</Layout>

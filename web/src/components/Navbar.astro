@@ -1,0 +1,28 @@
+---
+const links = [
+  { href: '/', label: 'Accueil' },
+  { href: '/prestations/', label: 'Prestations' },
+  { href: '/remboursement/', label: 'Remboursement' },
+  { href: '/blog/', label: 'Blog' },
+];
+const { pathname } = Astro.url;
+---
+<nav class="flex items-center gap-6 py-4">
+  <a href="/" class="text-lg font-semibold text-[#423560]">Maud Pozza</a>
+  <ul class="flex items-center gap-4 ml-auto">
+    {links.map((l) => {
+      const active = pathname === l.href || (l.href !== '/' && pathname.startsWith(l.href));
+      return (
+        <li>
+          <a
+            href={l.href}
+            class={`px-2 py-1 rounded hover:text-[#6A559A] ${active ? 'text-[#6A559A] font-medium' : 'text-gray-700'}`}
+          >
+            {l.label}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
