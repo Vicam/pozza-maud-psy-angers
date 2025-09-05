@@ -3,16 +3,43 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
     <title>Decap CMS</title>
+
+    <!-- 1) Normalise le hash (#/invite_token -> #invite_token) AVANT Identity -->
+    <script>
+      (function () {
+        var h = location.hash || "";
+        if (h.startsWith("#/")) {
+          // remplace uniquement le tout premier "#/" par "#"
+          location.replace(location.pathname + location.search + "#" + h.slice(2));
+        }
+      })();
+    </script>
+
+    <!-- 2) Netlify Identity (doit capter #invite_token / #recovery_token) -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
-      if (window.netlifyIdentity) window.netlifyIdentity.init();
+      if (window.netlifyIdentity) {
+        // Optionnel : rechargement après login/logout pour que Decap voie la session
+        netlifyIdentity.on("login", () => location.reload());
+        netlifyIdentity.on("logout", () => location.reload());
+        netlifyIdentity.init(); // déclenche la détection auto des tokens (#invite_token / #recovery_token)
+      }
     </script>
+
+    <!-- 3) Indique à Decap où est la config -->
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+
+    <!-- 4) Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
   </head>
   <body></body>
+
+  <!-- Styles de preview (facultatif) -->
   <script>
-    CMS.registerPreviewStyle('/styles/global.css');
+    if (window.CMS) {
+      CMS.registerPreviewStyle("/styles/global.css");
+    }
   </script>
 </html>
-
