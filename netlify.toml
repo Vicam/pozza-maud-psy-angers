@@ -1,11 +1,8 @@
 [build]
-  command = "cd web && npm ci && npm run build"
-  publish = "web/dist"
+  base = "web"
+  command = "npm ci --include=optional && npm run build"
+  publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
-
-# Optional: enable Node 18+ build image
-[functions]
-  node_bundler = "esbuild"
-
+  NODE_VERSION = "20.19.5"
+  NPM_CONFIG_INCLUDE = "optional"
