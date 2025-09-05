@@ -1,80 +1,26 @@
 <!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex" />
-    <title>Decap CMS</title>
-
-    <!-- 0) Normaliser le hash (#/invite_token -> #invite_token) -->
-    <script>
-      (function () {
-        var h = location.hash || "";
-        if (h.startsWith("#/")) {
-          // remplace uniquement le tout premier "#/" par "#"
-          location.replace(location.pathname + location.search + "#" + h.slice(2));
-        }
-      })();
-    </script>
-
-    <!-- 1) Netlify Identity -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script>
-      (function () {
-        function extractToken() {
-          var h = location.hash || "";
-          // accepte #invite_token=... OU #/invite_token=... par sécurité
-          var m = h.match(/#\/?invite_token=([^&]+)/) || h.match(/#\/?recovery_token=([^&]+)/);
-          return m ? m[1] : null;
-        }
-
-        function handleToken() {
-          var token = extractToken();
-          if (!token || !window.netlifyIdentity) return;
-
-          // Invite ou Recovery ?
-          if (/#\/?invite_token=/.test(location.hash)) {
-            // Accepter l'invitation (définition du mot de passe)
-            try {
-              netlifyIdentity.acceptInvite(token);
-            } catch (e) {
-              console.warn("acceptInvite error:", e);
-            }
-          } else if (/#\/?recovery_token=/.test(location.hash)) {
-            // Réinitialisation du mot de passe
-            try {
-              netlifyIdentity.recover(token);
-            } catch (e) {
-              console.warn("recover error:", e);
-            }
-          }
-        }
-
-        if (window.netlifyIdentity) {
-          netlifyIdentity.on("init", handleToken);
-          // Ce reload garantit que Decap voit la session après login/logout
-          netlifyIdentity.on("login", () => location.reload());
-          netlifyIdentity.on("logout", () => location.reload());
-          netlifyIdentity.init();
-
-          // Sécurité : si l’event 'init' arrive trop tôt, relance dans un micro délai
-          setTimeout(handleToken, 50);
-        }
-      })();
-    </script>
-
-    <!-- 2) Indiquer à Decap où lire la config -->
-    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
-
-    <!-- 3) Charger Decap -->
-    <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
-  </head>
-  <body></body>
-
-  <!-- Styles de preview (facultatif) -->
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Content Manager</title>
+  <link rel="cms-config-url" href="/admin/config.yml" type="text/yaml">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <!-- Include the script that builds the page and powers Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    if (window.CMS) {
-      CMS.registerPreviewStyle("/styles/global.css");
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
     }
   </script>
+</body>
 </html>
