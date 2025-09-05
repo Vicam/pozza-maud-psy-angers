@@ -1,3 +1,5 @@
 /blog.html          /blog/          301
 /consultations.html /consultations/ 301
 
+# Avoid flicker due to missing Wix assets referenced in static export
+/psy_files/*        /empty          200
