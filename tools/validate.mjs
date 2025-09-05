@@ -35,7 +35,7 @@ function isInternal(href) {
 function checkHref(href) {
   if (href === '/') return null; // ok
   const pathPart = href.split(/[?#]/)[0];
-  if (!pathPart.endsWith('/')) return 'missing trailing /';
+  if (!pathPart.endsWith('/') && !/\.(css|js)$/.test(pathPart)) return 'missing trailing /';
   if (!href.startsWith('/')) return 'missing leading /';
   return null;
 }
