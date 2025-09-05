@@ -19,3 +19,7 @@
 /* Hide legacy Wix menu component to avoid duplication */
 #comp-l9v8ib98{display:none!important}
 
+/* Hide Wix cookie banner */
+.consent-banner-root {
+    display: none !important;
+}
