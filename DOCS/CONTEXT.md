@@ -4,6 +4,10 @@ L'objectif de ce projet est de migrer le site Wix de Maud Pozza, psychologue à 
 
 **URL du site original :** https://www.pozza-maud-psy-angers.com/
 
+## Travail en cours
+
+- **Suppression de la barre de cookies :** La barre de cookies héritée de Wix est non fonctionnelle et superflue pour un site statique. Elle a été masquée via CSS (`.consent-banner-root { display: none !important; }`) dans `site/assets/nav.css`.
+
 ## Étapes réalisées
 
 Pour atteindre l'état actuel du projet, les étapes suivantes ont été accomplies :
