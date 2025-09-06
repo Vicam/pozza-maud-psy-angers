@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "build": "npm run build:site",
     "build:site": "node tools/convert-manual-html.mjs",
     "check:links": "node tools/validate.mjs",
     "test": "node tools/check-wix-urls.mjs"
@@ -11,5 +12,8 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {}
+  "dependencies": {},
+  "engines": {
+    "node": ">=20 <21"
+  }
 }

@@ -58,7 +58,7 @@
   container.appendChild(ul);
   nav.appendChild(container);
 
-  // Insert nav at the very top of <body> to avoid clipping/overflow from Wix containers
+  // Insert nav at the very top of <body> to avoid clipping/overflow from PMPA containers
   document.body.insertBefore(nav, document.body.firstChild);
 
   // Prevent default navigation on the "Plus" toggle
