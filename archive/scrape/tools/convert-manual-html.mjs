@@ -3,8 +3,11 @@
 
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const SRC_DIR = path.resolve('out_manual');
+// Resolve source directory relative to this script location so it works from archive/
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SRC_DIR = path.resolve(__dirname, '..', 'out_manual');
 const DEST_DIR = path.resolve('site');
 const ORIGIN = 'https://www.pozza-maud-psy-angers.com';
 

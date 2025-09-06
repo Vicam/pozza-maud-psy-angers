@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run build:site",
-    "build:site": "node tools/convert-manual-html.mjs",
-    "check:links": "node tools/validate.mjs",
-    "test": "node tools/check-wix-urls.mjs"
+    "build:site": "node archive/scrape/tools/convert-manual-html.mjs",
+    "check:links": "node archive/scrape/tools/validate.mjs",
+    "test": "node archive/scrape/tools/check-wix-urls.mjs"
   },
   "keywords": [],
   "author": "",
