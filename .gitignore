@@ -3,6 +3,5 @@ archive/scrape/node_modules/
 out/
 dist/
 .netlify/
-site/
 .DS_Store
 
