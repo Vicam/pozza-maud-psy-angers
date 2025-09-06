@@ -28,3 +28,41 @@ Le site est maintenant fonctionnel en local et ressemble beaucoup Ã  l'original,
 -   **Site statique gÃ©nÃ©rÃ© :** `site/` est le rÃ©pertoire racine du site statique, prÃªt Ã  Ãªtre dÃ©ployÃ©. C'est le dossier de publication pour Netlify.
 -   **Outils :** `tools/` contient les scripts utilisÃ©s pour la conversion et la validation.
 -   **Archives :** `archive/` contient d'anciennes tentatives de scraping automatisÃ© qui ne sont plus actives.
+## Responsive
+
+Cette section récapitule ce qui a été ajouté/modifié pour rendre le site mobile-first, et comment l’adapter si besoin.
+
+- Chargement CSS/JS (chaque page HTML)
+  - `site/assets/tailwind.css`: CSS Tailwind compilé (via `npm run build:css`).
+  - `site/assets/responsive.css`: surcouches mobiles et fixes Wix (neutralisation des min-width/offsets, grilles, images fluides, etc.).
+  - `site/assets/nav.css` + `site/assets/nav.js`: barre de navigation (desktop + hamburger mobile). Un fallback HTML du nav est présent en haut du `<body>` et `nav.js` l’améliore.
+  - `body class="responsive"` est présent pour lever les `min-width` hérités de Wix.
+
+- Build Tailwind
+  - Entrée: `styles/tailwind.css`; sortie: `site/assets/tailwind.css`.
+  - Config: `tailwind.config.js` (content = `site/**/*.html`, `site/**/*.js`) et `postcss.config.js`.
+  - Netlify: `netlify.toml` exécute `npm ci && npm run build` puis publie `site/`.
+
+- Navigation (comportement)
+  - Desktop = 1024px: liens à gauche; « contact strip » (mail + téléphone) à droite.
+  - Mobile < 760px: bouton hamburger. Au clic, `#custom-nav` reçoit `.open` et la liste apparaît en panneau overlay (position: fixed; sous la barre), indépendant du flux Wix.
+  - Masquage des menus Wix en mobile pour éviter les conflits avec notre barre.
+
+- Surcouches CSS Wix (responsive.css)
+  - Images fluides: `img, video { max-width:100%; height:auto }` et `.pmpaui-image img,.wixui-image img { width:100% !important }`.
+  - Neutralisation des min-width/offsets Wix: `#SITE_CONTAINER, #site-root, #masterPage { max-width:100% }`, `[id^="comp-"] { min-width:0 !important }`; reset des `margin-left/left` sur `*inlineContent-gridContainer` en mobile.
+  - Grilles: `.pmpaui-column-strip .V5AUxf, .wixui-column-strip .V5AUxf` ? 1 colonne mobile, 2 colonnes = 1024px.
+  - Typographies: clamp des polices (`.font_2/3/4/5` pour titres, `.font_1/.font_9` pour paragraphes) afin d’éviter tout débordement.
+  - Texte du header: largeur max + centrage; mail/tél en block, centrés; suppression des petites icônes qui généraient des chevauchements.
+  - Masquages: bannière cookies Wix et iframe analytics TWIPLA supprimées; menus Wix masqués en mobile.
+
+- Adapter / étendre
+  - Breakpoints: modifier `@media (max-width: 760px)` (mobile) et `@media (min-width: 1024px)` (desktop) dans `nav.css` / `responsive.css`.
+  - Contact strip: modifier le HTML injecté dans `site/assets/nav.js` (adresse/numéro) ou masquer sur desktop/mobile selon besoin.
+  - Section récalcitrante: ajouter une règle ciblée par ID `#comp-…` dans `site/assets/responsive.css` (idéalement sous le bloc mobile).
+
+## Responsive — updates
+
+- Mobile menu: overlay panel under the fixed bar. Adds console logs: "[nav] init" and "[nav] toggle clicked / open state". Global helper: window.__pmpaToggleNav().
+- Desktop contacts: legacy mailto/tel anchors from Wix are hidden site-wide on desktop; only the contact strip in the top bar remains visible. (CSS in site/assets/responsive.css)
+- Text wrapping: header paragraphs get max-width and side padding on mobile to avoid edge clipping.

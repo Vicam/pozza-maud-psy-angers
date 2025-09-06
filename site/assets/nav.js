@@ -1,6 +1,12 @@
 // Injects a simple navigation bar compatible with static hosting
 (function () {
-  if (document.getElementById('custom-nav')) return;
+  function onReady(fn){
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', fn, {once:true}); }
+    else { fn(); }
+  }
+  onReady(function(){
+  try { console.log('[nav] init start'); } catch(e) {}
+  var existing = document.getElementById('custom-nav');
 
   // Inject CSS link next to this script
   var link = document.createElement('link');
@@ -14,13 +20,24 @@
   }
   document.head.appendChild(link);
 
-  // Build nav structure
-  var nav = document.createElement('nav');
+  // Either use existing markup or build it
+  var nav = existing || document.createElement('nav');
   nav.id = 'custom-nav';
-  var container = document.createElement('div');
+  var container = existing ? nav.querySelector('.container') : document.createElement('div');
+  if (!container) { container = document.createElement('div'); }
   container.className = 'container';
 
-  var ul = document.createElement('ul');
+  // Hamburger toggle (for mobile)
+  var toggle = container.querySelector('.menu-toggle') || document.createElement('button');
+  toggle.className = 'menu-toggle';
+  toggle.setAttribute('aria-expanded', toggle.getAttribute('aria-expanded') || 'false');
+  toggle.setAttribute('aria-controls', 'custom-nav-list');
+  if (!toggle.innerHTML || !/Menu/.test(toggle.innerHTML)) {
+    toggle.innerHTML = '<svg width="20" height="16" viewBox="0 0 20 16" aria-hidden="true" focusable="false" style="display:block"><rect y="0" width="20" height="2" fill="#423560"/><rect y="7" width="20" height="2" fill="#423560"/><rect y="14" width="20" height="2" fill="#423560"/></svg><span>Menu</span>';
+  }
+
+  var ul = container.querySelector('#custom-nav-list') || document.createElement('ul');
+  ul.id = 'custom-nav-list';
 
   function liLink(text, href, cls) {
     var li = document.createElement('li');
@@ -32,37 +49,60 @@
     return li;
   }
 
-  // Items
-  ul.appendChild(liLink('Accueil', '/', 'brand'));
-  ul.appendChild(liLink('Prestations', '/prestations/'));
+  // Items (create only if empty)
+  if (!ul.children.length) {
+    ul.appendChild(liLink('Accueil', '/', 'brand'));
+    ul.appendChild(liLink('Prestations', '/prestations/'));
+    var liPlus = document.createElement('li');
+    liPlus.className = 'dropdown';
+    var aPlus = document.createElement('a');
+    aPlus.href = '#';
+    aPlus.textContent = 'Plus';
+    liPlus.appendChild(aPlus);
+    var menu = document.createElement('div');
+    menu.className = 'dropdown-menu';
+    var aRemb = document.createElement('a');
+    aRemb.textContent = 'Aides financieres';
+    aRemb.href = '/rembousement/';
+    var aBlog = document.createElement('a');
+    aBlog.textContent = 'Blog';
+    aBlog.href = '/blog/';
+    menu.appendChild(aRemb);
+    menu.appendChild(aBlog);
+    liPlus.appendChild(menu);
+    ul.appendChild(liPlus);
+  } else {
+    var aPlus = ul.querySelector('.dropdown > a') || document.createElement('a');
+  }
 
-  var liPlus = document.createElement('li');
-  liPlus.className = 'dropdown';
-  var aPlus = document.createElement('a');
-  aPlus.href = '#';
-  aPlus.textContent = 'Plus';
-  liPlus.appendChild(aPlus);
-  var menu = document.createElement('div');
-  menu.className = 'dropdown-menu';
-  var aRemb = document.createElement('a');
-  aRemb.textContent = 'Aides financieres';
-  aRemb.href = '/rembousement/'; // keep current folder name
-  var aBlog = document.createElement('a');
-  aBlog.textContent = 'Blog';
-  aBlog.href = '/blog/';
-  menu.appendChild(aRemb);
-  menu.appendChild(aBlog);
-  liPlus.appendChild(menu);
-  ul.appendChild(liPlus);
+  // Ensure a contact strip exists (desktop-only via CSS)
+  var contact = container.querySelector('.contact-strip');
+  if (!contact) {
+    contact = document.createElement('div');
+    contact.className = 'contact-strip';
+    contact.innerHTML = '<a href="mailto:maudpozza.psy@gmail.com">maudpozza.psy@gmail.com</a>\n<a href="tel:+33764491267">07.64.49.12.67</a>';
+  }
 
-  container.appendChild(ul);
-  nav.appendChild(container);
+  if (!existing) {
+    container.appendChild(toggle);
+    container.appendChild(contact);
+    container.appendChild(ul);
+    nav.appendChild(container);
+  } else {
+    // If existing markup is present, make sure pieces are attached
+    if (!toggle.parentNode) container.prepend(toggle);
+    if (!contact.parentNode) container.appendChild(contact);
+    if (!ul.parentNode) container.appendChild(ul);
+  }
 
-  // Insert nav at the very top of <body> to avoid clipping/overflow from PMPA containers
-  document.body.insertBefore(nav, document.body.firstChild);
+  // Insert nav at the very top if we created it
+  if (!existing) {
+    try{ document.body.insertBefore(nav, document.body.firstChild); }
+    catch(e){ document.addEventListener('DOMContentLoaded', function(){ document.body.insertBefore(nav, document.body.firstChild); }, {once:true}); }
+  }
 
-  // Prevent default navigation on the "Plus" toggle
-  aPlus.addEventListener('click', function (e) { e.preventDefault(); });
+  // Prevent default navigation on the "Plus" toggle (for desktop hover menu)
+  if (aPlus) aPlus.addEventListener('click', function (e) { e.preventDefault(); });
 
   // Mark active link by path
   try {
@@ -72,7 +112,7 @@
       var href = a.getAttribute('href');
       if (!href) return;
       function norm(u){
-        try { return new URL(u, location.origin).pathname.replace(/\\/+$/,'/'); } catch { return u; }
+        try { return new URL(u, location.origin).pathname.replace(/\/+$/, '/'); } catch (e) { return u; }
       }
       if (norm(path) === norm(href)) {
         var li = a.closest('li');
@@ -80,5 +120,46 @@
       }
     });
   } catch (e) { /* no-op */ }
+
+  // Toggle logic (exposed + listeners)
+  window.__pmpaToggleNav = function(){
+    try { console.log('[nav] toggle clicked'); } catch(e) {}
+    var el = document.getElementById('custom-nav');
+    if (!el) return;
+    var open = el.classList.toggle('open');
+    try { console.log('[nav] open state:', open); } catch(e) {}
+    var t = el.querySelector('.menu-toggle');
+    if (t) t.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  toggle.addEventListener('click', window.__pmpaToggleNav, true);
+  toggle.addEventListener('pointerdown', function(e){ if(e.pointerType==='touch') { e.preventDefault(); window.__pmpaToggleNav(); } }, true);
+  toggle.setAttribute('onclick','try{window.__pmpaToggleNav&&window.__pmpaToggleNav()}catch(e){};return false;');
+  try { console.log('[nav] init done'); } catch(e) {}
+
+  // Remove duplicate contact info rendered in legacy markup
+  try {
+    (function hideDupContacts(){
+      var phoneRx = /0?7[\.\s]*64[\.\s]*49[\.\s]*12[\.\s]*67/i;
+      var mailRx = /maudpozza\.psy@gmail\.com/i;
+      // Hide any mailto/tel anchors outside our custom nav
+      document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"]').forEach(function(a){
+        if (!a.closest('#custom-nav')) { a.style.display = 'none'; }
+      });
+      // Hide plain-text duplicates if present
+      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+      var toHide = new Set();
+      var n;
+      while ((n = walker.nextNode())) {
+        var t = (n.nodeValue || '').trim();
+        if (!t) continue;
+        if (phoneRx.test(t) || mailRx.test(t)) {
+          var el = n.parentElement;
+          if (el && !el.closest('#custom-nav')) toHide.add(el);
+        }
+      }
+      toHide.forEach(function(el){ el.style.display = 'none'; });
+    })();
+  } catch(e) { try{ console.warn('[nav] dup-contact cleanup error', e); }catch(_){} }
+  });
 })();
 

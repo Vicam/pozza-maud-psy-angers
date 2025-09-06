@@ -1,9 +1,18 @@
 /* Simple site-wide navigation bar with a hover dropdown */
-#custom-nav{position:sticky;top:0;z-index:1000000;background:#fff;border-bottom:1px solid #eee;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;pointer-events:auto}
-#custom-nav .container{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:flex-start;padding:8px 12px;gap:18px}
+#custom-nav{position:fixed;top:0;left:0;right:0;z-index:2147483646;background:#fff;border-bottom:1px solid #eee;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;pointer-events:auto !important;--nav-h:58px}
+#custom-nav *{pointer-events:auto !important}
+#custom-nav .container{max-width:1024px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:18px}
+/* Prevent content from being hidden under the fixed bar */
+body{padding-top:58px}
+@media (min-width:1024px){#custom-nav .container{padding:12px 16px}}
 #custom-nav a{color:#423560;text-decoration:none}
 #custom-nav a:hover{color:#6A559A}
 #custom-nav ul{list-style:none;margin:0;padding:0;display:flex;gap:18px}
+#custom-nav ul a{font-size:15px}
+@media (min-width:1024px){
+  #custom-nav ul{gap:22px}
+  #custom-nav ul a{font-size:16px}
+}
 #custom-nav li{position:relative}
 #custom-nav .brand{font-weight:600;margin-right:12px}
 #custom-nav .dropdown > a:after{content:" \25BE"}
@@ -11,9 +20,26 @@
 #custom-nav .dropdown-menu a{display:block;padding:8px 12px}
 #custom-nav .dropdown:hover .dropdown-menu{display:block}
 #custom-nav .active > a{color:#6A559A;font-weight:600}
+/* Contact strip (desktop) */
+.contact-strip{margin-left:auto;display:flex;gap:18px;color:#423560;opacity:.9;font-size:14px;align-items:center}
+.contact-strip a{color:inherit}
+
+/* Mobile hamburger */
+#custom-nav .menu-toggle{display:none;background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:6px 10px;color:#423560;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+#custom-nav .menu-toggle:focus{outline:2px solid #6A559A;outline-offset:2px}
 @media (max-width: 760px){
-  #custom-nav .container{flex-wrap:wrap}
-  #custom-nav ul{gap:12px}
+  #custom-nav .menu-toggle{display:inline-flex;align-items:center;gap:8px}
+  #custom-nav .container{flex-wrap:nowrap}
+  #custom-nav .menu-toggle{margin-left:auto}
+  #custom-nav ul{display:none !important;}
+  /* Overlay panel on open */
+  #custom-nav.open .container{flex-wrap:wrap}
+  #custom-nav.open #custom-nav-list{display:flex !important;flex-direction:column;gap:12px;position:fixed;top:var(--nav-h);left:0;right:0;background:#fff;border-top:1px solid #eee;box-shadow:0 8px 22px rgba(0,0,0,.08);padding:12px 16px;z-index:2147483647}
+  #custom-nav .dropdown:hover .dropdown-menu{display:none}
+  #custom-nav .dropdown-menu{position:static;min-width:0;border:none;box-shadow:none;padding:0}
+  #custom-nav .dropdown-menu a{padding:8px 0 8px 12px}
+  /* Hide contact strip on mobile */
+  .contact-strip{display:none}
 }
 
 /* Hide legacy Wix menu component to avoid duplication */
