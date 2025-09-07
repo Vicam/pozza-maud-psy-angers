@@ -222,23 +222,27 @@ a[href*="linkedin.com"] { display:none !important; }
     margin-right: auto;
     max-width: 1024px;
   }
-  /* Desktop: place logo left, texts right to avoid overlap */
+  /* Desktop: place texts left, logo right to compact header */
   [data-mesh-id="comp-l9v8ia4dinlineContent-gridContainer"] {
     display: grid !important;
-    grid-template-columns: auto 1fr !important;
+    grid-template-columns: 1fr auto !important;
     align-items: center !important;
     gap: 16px !important;
     justify-items: start !important;
   }
-  #comp-l9v8ia4d1 { grid-column: 1 !important; margin: 0 !important; justify-self: start !important; }
+  /* Logo on the right */
+  #comp-l9v8ia4d1 { grid-column: 2 !important; margin: 0 !important; justify-self: start !important; }
+  /* Title and subtitle on the left */
   #comp-l9v8ia4e, #comp-l9v8ia4e1 {
-    grid-column: 2 !important;
+    grid-column: 1 !important;
     text-align: left !important;
     max-width: 48rem !important;
     justify-self: start !important;
   }
   #img_comp-l9v8ia4d1 { width: 88px !important; height: auto !important; }
 }
+
+/* Removed global hide of colorUnderlay to avoid hiding sections */
 
 /* --- Layout fixes: header overlap, spacing, mobile width (2025-09-07) --- */
 /* Ensure no overlap between logo and texts in header */

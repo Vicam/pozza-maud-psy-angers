@@ -160,6 +160,41 @@
       toHide.forEach(function(el){ el.style.display = 'none'; });
     })();
   } catch(e) { try{ console.warn('[nav] dup-contact cleanup error', e); }catch(_){} }
+
+  // Remove the top page background colorUnderlay that creates a large empty band
+  try {
+    var topUnderlay = document.querySelector('#bgLayers_pageBackground_m30mg [data-testid="colorUnderlay"].LWbAav.Kv1aVt');
+    if (topUnderlay && topUnderlay.parentNode) {
+      topUnderlay.parentNode.removeChild(topUnderlay);
+      try { console.log('[ui] removed top colorUnderlay'); } catch(e) {}
+    }
+  } catch(e) { try{ console.warn('[ui] colorUnderlay remove error', e); }catch(_){} }
+  
+  // Fix a few common mis-decoded French characters seen in static export
+  try {
+    (function fixFrenchEncoding(){
+      var pairs = [
+        ['sÅ“', 'sœur'],
+        ['cÅ“', 'cœur'],
+        ['â€œ', '“'],
+        ['â€', '”'],
+        ['â€™', '’']
+      ];
+      function walk(node){
+        if(node.nodeType===3){
+          var t=node.nodeValue;
+          for(var i=0;i<pairs.length;i++){
+            var a=pairs[i][0], b=pairs[i][1];
+            if(t.indexOf(a)!==-1){ t = t.split(a).join(b); }
+          }
+          node.nodeValue=t;
+        } else if(node.nodeType===1 && node.tagName!=='SCRIPT' && node.tagName!=='STYLE'){
+          for(var j=0;j<node.childNodes.length;j++) walk(node.childNodes[j]);
+        }
+      }
+      walk(document.body);
+    })();
+  } catch(e) { try{ console.warn('[nav] encoding-fix error', e); }catch(_){} }
   });
 })();
 
