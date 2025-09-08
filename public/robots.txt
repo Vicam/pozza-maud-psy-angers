@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.pozza-maud-psy-angers.com/sitemap-index.xml
+

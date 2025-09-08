@@ -1,0 +1,2 @@
+﻿Votre enfant a des difficultés à l'école ? Avec les devoirs ? Les séances de psychopédagogies sont orientées spécifiquement sur l'aspect scolaire. Dans ce cadre on travaille sur la métacognition ("apprendre à apprendre"), Je réfléchi ainsi avec le jeune afin de trouver ensemble des stratégies d'apprentissages, d'organisation de travail ou encore de gestion du stress qui pourraient être plus adaptées au profil particulier de votre enfant. Je peux notamment accompagner les enfants ayant des troubles des apprentissages ou des difficultés d'attention (TDAH) par exemple.
+

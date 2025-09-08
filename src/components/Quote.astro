@@ -1,0 +1,10 @@
+---
+const { author } = Astro.props;
+---
+<figure class="card p-6 bg-white">
+  <blockquote class="border-l-4 border-highlight pl-4 italic text-slate-700">
+    <slot />
+  </blockquote>
+  {author && <figcaption class="mt-3 text-sm text-slate-600">— {author}</figcaption>}
+</figure>
+

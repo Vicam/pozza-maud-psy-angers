@@ -1,0 +1,51 @@
+---
+import "../styles/global.css";
+import ogImage from "../assets/cabinet.jpeg";
+const { title = "POZZA Maud – Psychologue à Angers", description = "Psychologue à Angers, spécialisée enfant et adolescent. Suivi enfant, adolescent, psychopédagogie, accompagnement parental. RDV en ligne." } = Astro.props;
+const schema = {
+  "@context":"https://schema.org",
+  "@type":"MedicalBusiness",
+  name:"POZZA Maud – Psychologue",
+  medicalSpecialty:"Pediatric",
+  url:"https://www.pozza-maud-psy-angers.com/",
+  areaServed:"Angers, France",
+  founder:"Maud Pozza",
+  identifier:[
+    {"@type":"PropertyValue","propertyID":"ADELI","value":"499314193"},
+    {"@type":"PropertyValue","propertyID":"RPPS","value":"10008530510"}
+  ]
+};
+---
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="POZZA Maud – Psychologue à Angers" />
+    <meta property="og:description" content="Psychologue à Angers, spécialisée enfant et adolescent. RDV en ligne." />
+    <meta property="og:image" content={ogImage.src} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="module" src="/src/scripts/alpine.ts"></script>
+    <style>
+      :root { --font-title: "Playfair Display", serif; --font-body: "Source Sans 3", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; }
+      h1,h2,h3,h4 { font-family: var(--font-title); }
+      body { font-family: var(--font-body); color: #1F2933; background: #FAFAF7; }
+    </style>
+  </head>
+  <body>
+    <a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-accent focus:px-3 focus:py-2 focus:rounded">Aller au contenu</a>
+    <slot name="header" />
+    <main id="contenu" class="min-h-screen"><slot /></main>
+    <slot name="footer" />
+    <!-- JSON-LD LocalBusiness/MedicalBusiness -->
+    <script type="application/ld+json">{JSON.stringify(schema)}</script>
+  </body>
+  </html>

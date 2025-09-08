@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Helpers */
+.sr-only[x-cloak] { display: none; }
+[x-cloak] { display: none !important; }
+.prose p { margin-top: 0.75rem; margin-bottom: 0.75rem; }
+.btn-primary { @apply inline-flex items-center justify-center rounded-2xl bg-accent px-5 py-3 text-white font-medium shadow hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent; }
+.btn-outline { @apply inline-flex items-center justify-center rounded-2xl border-2 border-accent px-5 py-3 text-accent font-medium hover:bg-accent/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent; }
+.card { @apply rounded-2xl border border-slate-200 bg-white/90 shadow-sm; }
+
+/* Chips */
+.chip { @apply inline-flex items-center gap-1.5 rounded-full border border-accent px-2.5 py-1 text-xs md:text-sm text-accent hover:shadow-sm transition-shadow whitespace-nowrap; }
+.chip svg, .chip img { @apply h-4 w-4; }
+.chip-icon { @apply p-1.5 px-2; }
