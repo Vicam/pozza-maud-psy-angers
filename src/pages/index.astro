@@ -7,6 +7,8 @@ import Section from "../components/Section.astro";
 import Card from "../components/Card.astro";
 import Timeline from "../components/Timeline.astro";
 import Quote from "../components/Quote.astro";
+import linkedin from "../assets/logo_linkedin.webp";
+import portrait from "../assets/maud_pozza.jpg";
 
 // Contenu Markdown (copié depuis DOCS/CONTENU.md en fichiers séparés)
 import S1 from "../content/home/section-1.md";
@@ -68,6 +70,11 @@ import S12 from "../content/home/section-12.md";
   <!-- Section 6 : preuves -->
   <Section id="formation-pro" title="Formation professionnelle — Ce qui me distingue">
     <S6 />
+    <div class="mt-4">
+      <a class="chip chip-icon opacity-90" href="https://fr.linkedin.com/in/maud-pozza-3a729a15b" target="_blank" rel="me noopener" aria-label="Profil LinkedIn">
+        <img src={linkedin.src} alt="LinkedIn" />
+      </a>
+    </div>
   </Section>
 
   <!-- Section 7 : timeline (diplômes) -->
@@ -80,7 +87,14 @@ import S12 from "../content/home/section-12.md";
 
   <!-- Section 8 : bio -->
   <Section id="bio" title="Qui suis-je ?">
-    <S8 />
+    <div class="grid gap-6 md:grid-cols-3 items-start">
+      <div class="md:col-span-1">
+        <img src={portrait.src} alt="Maud Pozza – Psychologue" class="w-full h-auto rounded-2xl shadow-md" loading="lazy" />
+      </div>
+      <div class="md:col-span-2">
+        <S8 />
+      </div>
+    </div>
   </Section>
 
   <!-- Section 9 : citation -->
@@ -98,18 +112,19 @@ import S12 from "../content/home/section-12.md";
     </div>
   </Section>
 
-  <!-- Section 11 : contact (form Netlify) -->
+  <!-- Section 11 : contact (actions) -->
   <Section id="contact" title="Contact">
     <S11 />
-    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="mt-6 grid gap-4 max-w-xl">
-      <input type="hidden" name="form-name" value="contact" />
-      <p class="hidden"><label>Ne pas remplir: <input name="bot-field"></label></p>
-      <label class="block">Nom <input class="mt-1 w-full" name="nom" required></label>
-      <label class="block">Email <input class="mt-1 w-full" type="email" name="email" required></label>
-      <label class="block">Téléphone <input class="mt-1 w-full" name="telephone"></label>
-      <label class="block">Message <textarea class="mt-1 w-full" name="message" rows="6" required></textarea></label>
-      <button class="btn-primary w-fit" type="submit">Envoyer</button>
-    </form>
+    <!-- Mobile: actions first -->
+    <div class="mt-6 flex gap-3 md:hidden">
+      <a class="btn-primary" href="tel:+33764491267">📞 Appeler</a>
+      <a class="btn-outline" href="mailto:maudpozza.psy@gmail.com">✉️ Écrire</a>
+    </div>
+    <!-- Desktop: show info on chips -->
+    <div class="mt-6 hidden md:flex gap-3">
+      <a class="chip" href="tel:+33764491267">📞 07 64 49 12 67</a>
+      <a class="chip" href="mailto:maudpozza.psy@gmail.com">✉️ maudpozza.psy@gmail.com</a>
+    </div>
   </Section>
 
   <Fragment slot="footer"><Footer /></Fragment>

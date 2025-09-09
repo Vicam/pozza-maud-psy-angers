@@ -4,16 +4,11 @@ Jeune femme enthousiaste et créative, j’ai toujours été passionnée par le 
  
 
 J'ai par la suite pu compléter ma formation initiale par d'autres formations complémentaires  :
-
--> formation sur le dessin de l'enfant en thérapie (APPEA Paris - 2020) 
-
--> initiation à la thérapie systémique et familiale (AFPRO Paris - 2020) 
-
--> formation à la communication non violente ou CNV (AFFCNV Paris - 2021/2022) 
-
--> formation sur le jeu thérapeutique et le deuil chez l'enfant / ado (institut Ayana Paris - 2022) 
-
--> Formation à la Thérapie ACT pour accompagner les émotions des enfants/ados APPEA Paris -2025)
+- formation sur le dessin de l'enfant en thérapie (APPEA Paris - 2020) 
+- initiation à la thérapie systémique et familiale (AFPRO Paris - 2020) 
+- formation à la communication non violente ou CNV (AFFCNV Paris - 2021/2022) 
+- formation sur le jeu thérapeutique et le deuil chez l'enfant / ado (institut Ayana Paris - 2022) 
+- Formation à la Thérapie ACT pour accompagner les émotions des enfants/ados APPEA Paris -2025)
 
  
 
@@ -22,5 +17,6 @@ J'ai exercé plusieurs années en tant que psychologue de l'éducation nationale
  
 
 Au cours de mes différentes expériences professionnelles, j’ai eu la chance de rencontrer de nombreux enfants, chacun avec leurs particularités. J’ai à coeur d’accompagner un maximum d’enfants et d’adolescents afin qu'il puisse se sentir bien dans leurs baskets !
+
 
 
