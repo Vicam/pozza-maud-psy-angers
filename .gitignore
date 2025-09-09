@@ -1,7 +1,40 @@
+# Dependencies
 node_modules/
-archive/scrape/node_modules/
-out/
+.pnp/
+.pnp.js
+
+# Production build
 dist/
-.netlify/
+public/_astro/
+
+# Astro/Vite caches
+.astro/
+.vite/
+.esbuild/
+.cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Tooling/Editor
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.netlify/
+
+# Tests/coverage
+coverage/
+
+# Temporary files
+tmp_*.txt
 

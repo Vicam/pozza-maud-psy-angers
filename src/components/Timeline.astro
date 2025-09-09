@@ -1,0 +1,14 @@
+---
+const { items = [] } = Astro.props; // [{title, subtitle, dates, text}]
+---
+<ol class="relative border-l border-accent/30 pl-6 space-y-8">
+  {items.map(it => (
+    <li>
+      <span class="absolute -left-2 top-1.5 h-3 w-3 rounded-full bg-accent"></span>
+      <h3 class="text-lg font-semibold">{it.title}</h3>
+      {it.subtitle && <p class="text-slate-600">{it.subtitle}</p>}
+      {it.dates && <p class="text-sm text-slate-500">{it.dates}</p>}
+      {it.text && <p class="mt-2 text-slate-700">{it.text}</p>}
+    </li>
+  ))}
+</ol>

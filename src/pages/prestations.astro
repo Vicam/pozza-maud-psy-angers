@@ -1,0 +1,49 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Section from "../components/Section.astro";
+import Card from "../components/Card.astro";
+
+// Contenu réutilisé depuis la page d'accueil
+import S3 from "../content/home/section-3.md";
+import S4a from "../content/home/section-4a.md";
+import S4b from "../content/home/section-4b.md";
+import S5a from "../content/home/section-5a.md";
+import S5b from "../content/home/section-5b.md";
+---
+<Base title="Prestations — POZZA Maud">
+  <Fragment slot="header"><Header /></Fragment>
+
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h1 class="text-3xl font-semibold">Prestations</h1>
+  </section>
+
+  <!-- Les différents types d'accompagnements -->
+  <Section id="prestations-liste" title="Les différents types d'accompagnements">
+    <S3 />
+    <div class="mt-6 inline-flex items-center gap-3">
+      <span class="inline-flex items-center rounded-full bg-highlight/20 px-3 py-1 text-accent font-semibold">55 € / ~50 min</span>
+      <span class="text-sm text-slate-600">Consultations non remboursées par l'assurance maladie</span>
+    </div>
+  </Section>
+
+  <!-- Suivi psychologique -->
+  <Section id="suivi" title="Suivi psychologique">
+    <div class="grid gap-6 md:grid-cols-2">
+      <Card title="Suivi psychologique enfant"><S4a /></Card>
+      <Card title="Suivi psychologique adolescent"><S4b /></Card>
+    </div>
+  </Section>
+
+  <!-- Psychopédagogie & Parentalité -->
+  <Section id="psychopedagogie" title="Psychopédagogie & Parentalité">
+    <div class="grid gap-6 md:grid-cols-2">
+      <Card title="Psychopédagogie"><S5a /></Card>
+      <Card title="Accompagnement à la parentalité"><S5b /></Card>
+    </div>
+  </Section>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</Base>
+

@@ -1,0 +1,131 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Card from "../components/Card.astro";
+import Timeline from "../components/Timeline.astro";
+import Quote from "../components/Quote.astro";
+import linkedin from "../assets/logo_linkedin.webp";
+import portrait from "../assets/maud_pozza.jpg";
+
+// Contenu Markdown (copié depuis DOCS/CONTENU.md en fichiers séparés)
+import S1 from "../content/home/section-1.md";
+import S2 from "../content/home/section-2.md";
+import S3 from "../content/home/section-3.md";
+import S4a from "../content/home/section-4a.md";
+import S4b from "../content/home/section-4b.md";
+import S5a from "../content/home/section-5a.md";
+import S5b from "../content/home/section-5b.md";
+import S6 from "../content/home/section-6.md";
+import S7 from "../content/home/section-7.md";
+import S8 from "../content/home/section-8.md";
+import S9 from "../content/home/section-9.md";
+import S10 from "../content/home/section-10.md";
+import S11 from "../content/home/section-11.md";
+import S12 from "../content/home/section-12.md";
+---
+<Base>
+  <Fragment slot="header"><Header /></Fragment>
+
+  <!-- Hero (Info essentiels + image cabinet) -->
+  <Hero />
+
+  <!-- Section 1 -->
+  <Section id="intro" title="POZZA Maud Psychologue">
+    <S1 />
+  </Section>
+
+  <!-- Section 2 -->
+  <Section id="quand-consulter" title="Quand consulter un psychologue ?">
+    <S2 />
+  </Section>
+
+  <!-- Section 3 -->
+  <Section id="prestations" title="Les différents types d'accompagnements">
+    <S3 />
+    <div class="mt-6 inline-flex items-center gap-3">
+      <span class="inline-flex items-center rounded-full bg-highlight/20 px-3 py-1 text-accent font-semibold">55 € / ~50 min</span>
+      <span class="text-sm text-slate-600">Consultations non remboursées par l'assurance maladie</span>
+    </div>
+  </Section>
+
+  <!-- Section 4 : 2 cartes -->
+  <Section id="suivi" title="Suivi psychologique">
+    <div class="grid gap-6 md:grid-cols-2">
+      <Card title="Suivi psychologique enfant"><S4a /></Card>
+      <Card title="Suivi psychologique adolescent"><S4b /></Card>
+    </div>
+  </Section>
+
+  <!-- Section 5 : 2 cartes -->
+  <Section id="psychopedagogie" title="Psychopédagogie & Parentalité">
+    <div class="grid gap-6 md:grid-cols-2">
+      <Card title="Psychopédagogie"><S5a /></Card>
+      <Card title="Accompagnement à la parentalité"><S5b /></Card>
+    </div>
+  </Section>
+
+  <!-- Section 6 : preuves -->
+  <Section id="formation-pro" title="Formation professionnelle — Ce qui me distingue">
+    <S6 />
+    <div class="mt-4">
+      <a class="chip chip-icon opacity-90" href="https://fr.linkedin.com/in/maud-pozza-3a729a15b" target="_blank" rel="me noopener" aria-label="Profil LinkedIn">
+        <img src={linkedin.src} alt="LinkedIn" />
+      </a>
+    </div>
+  </Section>
+
+  <!-- Section 7 : timeline (diplômes) -->
+  <Section id="parcours" title="Parcours universitaire">
+    <Timeline items={[
+      { title: "Université Paris 5 Descartes", subtitle: "Master de psychologie du développement social et cognitif de l'enfant et de l'adolescent", dates: "sept 2017 – juin 2019", text: "Voir détail ci-dessous." }
+    ]}/>
+    <div class="mt-6"><S7 /></div>
+  </Section>
+
+  <!-- Section 8 : bio -->
+  <Section id="bio" title="Qui suis-je ?">
+    <div class="grid gap-6 md:grid-cols-3 items-start">
+      <div class="md:col-span-1">
+        <img src={portrait.src} alt="Maud Pozza – Psychologue" class="w-full h-auto rounded-2xl shadow-md" loading="lazy" />
+      </div>
+      <div class="md:col-span-2">
+        <S8 />
+      </div>
+    </div>
+  </Section>
+
+  <!-- Section 9 : citation -->
+  <Section id="citation" title="Citation">
+    <Quote author="Carl Rogers – psychologue humaniste">
+      <S9 />
+    </Quote>
+  </Section>
+
+  <!-- Section 10 : horaires -->
+  <Section id="horaires" title="Horaires d'ouverture">
+    <S10 />
+    <div class="mt-4">
+      <span class="inline-block rounded-2xl border border-accent px-3 py-1 text-accent">Sur rendez-vous uniquement</span>
+    </div>
+  </Section>
+
+  <!-- Section 11 : contact (actions) -->
+  <Section id="contact" title="Contact">
+    <S11 />
+    <!-- Mobile: actions first -->
+    <div class="mt-6 flex gap-3 md:hidden">
+      <a class="btn-primary" href="tel:+33764491267">📞 Appeler</a>
+      <a class="btn-outline" href="mailto:maudpozza.psy@gmail.com">✉️ Écrire</a>
+    </div>
+    <!-- Desktop: show info on chips -->
+    <div class="mt-6 hidden md:flex gap-3">
+      <a class="chip" href="tel:+33764491267">📞 07 64 49 12 67</a>
+      <a class="chip" href="mailto:maudpozza.psy@gmail.com">✉️ maudpozza.psy@gmail.com</a>
+    </div>
+  </Section>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</Base>

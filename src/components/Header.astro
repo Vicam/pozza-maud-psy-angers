@@ -1,0 +1,71 @@
+---
+import logoUrl from "../assets/logo.png";
+const links = [
+  { href: "https://www.pozza-maud-psy-angers.com/", label: "Accueil" },
+  { href: "https://www.pozza-maud-psy-angers.com/prestations", label: "Prestations" },
+  { href: "https://www.pozza-maud-psy-angers.com/blog", label: "Blog" },
+  { href: "https://www.pozza-maud-psy-angers.com/remboursement", label: "Remboursement" }
+];
+---
+<header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b">
+  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-3">
+      <img src={logoUrl.src} alt="Logo Pozza Maud psychologue" class="h-10 w-auto" loading="eager" />
+      <span class="text-lg font-semibold text-accent hidden sm:inline">POZZA Maud</span>
+    </a>
+
+    <!-- Mobile -->
+    <div x-data="{open:false}" x-effect="document.documentElement.classList.toggle('overflow-hidden', open)" class="md:hidden">
+      <button @click="open=true" aria-label="Ouvrir le menu" x-bind:aria-expanded="open" class="p-2 rounded border border-slate-300">Menu</button>
+
+      <!-- Teleport the drawer outside the header to avoid containment by backdrop-blur -->
+      <template x-teleport="body">
+        <div x-show="open" x-cloak @keydown.escape.window="open=false">
+          <!-- Backdrop -->
+          <div class="fixed inset-0 z-50 bg-black/40" @click="open=false" x-transition.opacity aria-hidden="true"></div>
+          <!-- Slide-over -->
+          <div class="fixed inset-y-0 right-0 z-50 flex max-w-full">
+            <div class="w-screen max-w-sm"
+                 x-show="open"
+                 x-transition:enter="transform transition ease-in-out duration-200"
+                 x-transition:enter-start="translate-x-full"
+                 x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transform transition ease-in-out duration-200"
+                 x-transition:leave-start="translate-x-0"
+                 x-transition:leave-end="translate-x-full">
+              <nav class="h-full w-full bg-white p-6 shadow-xl overflow-y-auto">
+                <div class="flex items-center justify-between mb-6">
+                  <span class="text-lg font-semibold text-accent">Menu</span>
+                  <button @click="open=false" class="p-2 rounded border border-slate-300" aria-label="Fermer le menu" title="Fermer">×</button>
+                </div>
+                <ul class="space-y-4 text-lg">
+                  <li><a class="block" href="https://www.pozza-maud-psy-angers.com/">Accueil</a></li>
+                  <li><a class="block" href="https://www.pozza-maud-psy-angers.com/prestations">Prestations</a></li>
+                  <li><a class="block" href="https://www.pozza-maud-psy-angers.com/remboursement">Remboursement</a></li>
+                  <li><a class="block" href="https://www.pozza-maud-psy-angers.com/blog">Blog</a></li>
+                  <li><a class="btn-primary mt-4 inline-block" href="https://perfactive.fr/maud-pozza-psychologue/book?from=site-internet" target="_blank" rel="noopener noreferrer">Prendre rendez-vous</a></li>
+                </ul>
+                <div class="mt-8 border-t pt-6">
+                  <h3 class="text-base font-semibold text-slate-800 mb-3">Contact</h3>
+                  <div class="grid gap-3">
+                    <a class="btn-primary" href="tel:+33764491267">📞 Appeler</a>
+                    <a class="btn-outline" href="mailto:maudpozza.psy@gmail.com">✉️ Écrire</a>
+                  </div>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <!-- Desktop -->
+    <nav class="hidden md:flex items-center gap-6">
+      <a class="hover:text-accent" href="https://www.pozza-maud-psy-angers.com/">Accueil</a>
+      <a class="hover:text-accent" href="https://www.pozza-maud-psy-angers.com/prestations">Prestations</a>
+      <a class="hover:text-accent" href="https://www.pozza-maud-psy-angers.com/remboursement">Remboursement</a>
+      <a class="hover:text-accent" href="https://www.pozza-maud-psy-angers.com/blog">Blog</a>
+      <a class="btn-primary" href="https://perfactive.fr/maud-pozza-psychologue/book?from=site-internet" target="_blank" rel="noopener noreferrer">Prendre rendez-vous</a>
+    </nav>
+  </div>
+</header>
