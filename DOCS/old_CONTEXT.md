@@ -30,38 +30,38 @@ Le site est maintenant fonctionnel en local et ressemble beaucoup Ã  l'original,
 -   **Archives :** `archive/` contient d'anciennes tentatives de scraping automatisÃ© qui ne sont plus actives.
 ## Responsive
 
-Cette section récapitule ce qui a été ajouté/modifié pour rendre le site mobile-first, et comment l’adapter si besoin.
+Cette section rï¿½capitule ce qui a ï¿½tï¿½ ajoutï¿½/modifiï¿½ pour rendre le site mobile-first, et comment lï¿½adapter si besoin.
 
 - Chargement CSS/JS (chaque page HTML)
-  - `site/assets/tailwind.css`: CSS Tailwind compilé (via `npm run build:css`).
+  - `site/assets/tailwind.css`: CSS Tailwind compilï¿½ (via `npm run build:css`).
   - `site/assets/responsive.css`: surcouches mobiles et fixes Wix (neutralisation des min-width/offsets, grilles, images fluides, etc.).
-  - `site/assets/nav.css` + `site/assets/nav.js`: barre de navigation (desktop + hamburger mobile). Un fallback HTML du nav est présent en haut du `<body>` et `nav.js` l’améliore.
-  - `body class="responsive"` est présent pour lever les `min-width` hérités de Wix.
+  - `site/assets/nav.css` + `site/assets/nav.js`: barre de navigation (desktop + hamburger mobile). Un fallback HTML du nav est prï¿½sent en haut du `<body>` et `nav.js` lï¿½amï¿½liore.
+  - `body class="responsive"` est prï¿½sent pour lever les `min-width` hï¿½ritï¿½s de Wix.
 
 - Build Tailwind
-  - Entrée: `styles/tailwind.css`; sortie: `site/assets/tailwind.css`.
+  - Entrï¿½e: `styles/tailwind.css`; sortie: `site/assets/tailwind.css`.
   - Config: `tailwind.config.js` (content = `site/**/*.html`, `site/**/*.js`) et `postcss.config.js`.
-  - Netlify: `netlify.toml` exécute `npm ci && npm run build` puis publie `site/`.
+  - Netlify: `netlify.toml` exï¿½cute `npm ci && npm run build` puis publie `site/`.
 
 - Navigation (comportement)
-  - Desktop = 1024px: liens à gauche; « contact strip » (mail + téléphone) à droite.
-  - Mobile < 760px: bouton hamburger. Au clic, `#custom-nav` reçoit `.open` et la liste apparaît en panneau overlay (position: fixed; sous la barre), indépendant du flux Wix.
-  - Masquage des menus Wix en mobile pour éviter les conflits avec notre barre.
+  - Desktop = 1024px: liens ï¿½ gauche; ï¿½ contact strip ï¿½ (mail + tï¿½lï¿½phone) ï¿½ droite.
+  - Mobile < 760px: bouton hamburger. Au clic, `#custom-nav` reï¿½oit `.open` et la liste apparaï¿½t en panneau overlay (position: fixed; sous la barre), indï¿½pendant du flux Wix.
+  - Masquage des menus Wix en mobile pour ï¿½viter les conflits avec notre barre.
 
 - Surcouches CSS Wix (responsive.css)
   - Images fluides: `img, video { max-width:100%; height:auto }` et `.pmpaui-image img,.wixui-image img { width:100% !important }`.
   - Neutralisation des min-width/offsets Wix: `#SITE_CONTAINER, #site-root, #masterPage { max-width:100% }`, `[id^="comp-"] { min-width:0 !important }`; reset des `margin-left/left` sur `*inlineContent-gridContainer` en mobile.
   - Grilles: `.pmpaui-column-strip .V5AUxf, .wixui-column-strip .V5AUxf` ? 1 colonne mobile, 2 colonnes = 1024px.
-  - Typographies: clamp des polices (`.font_2/3/4/5` pour titres, `.font_1/.font_9` pour paragraphes) afin d’éviter tout débordement.
-  - Texte du header: largeur max + centrage; mail/tél en block, centrés; suppression des petites icônes qui généraient des chevauchements.
-  - Masquages: bannière cookies Wix et iframe analytics TWIPLA supprimées; menus Wix masqués en mobile.
+  - Typographies: clamp des polices (`.font_2/3/4/5` pour titres, `.font_1/.font_9` pour paragraphes) afin dï¿½ï¿½viter tout dï¿½bordement.
+  - Texte du header: largeur max + centrage; mail/tï¿½l en block, centrï¿½s; suppression des petites icï¿½nes qui gï¿½nï¿½raient des chevauchements.
+  - Masquages: banniï¿½re cookies Wix et iframe analytics TWIPLA supprimï¿½es; menus Wix masquï¿½s en mobile.
 
-- Adapter / étendre
+- Adapter / ï¿½tendre
   - Breakpoints: modifier `@media (max-width: 760px)` (mobile) et `@media (min-width: 1024px)` (desktop) dans `nav.css` / `responsive.css`.
-  - Contact strip: modifier le HTML injecté dans `site/assets/nav.js` (adresse/numéro) ou masquer sur desktop/mobile selon besoin.
-  - Section récalcitrante: ajouter une règle ciblée par ID `#comp-…` dans `site/assets/responsive.css` (idéalement sous le bloc mobile).
+  - Contact strip: modifier le HTML injectï¿½ dans `site/assets/nav.js` (adresse/numï¿½ro) ou masquer sur desktop/mobile selon besoin.
+  - Section rï¿½calcitrante: ajouter une rï¿½gle ciblï¿½e par ID `#comp-ï¿½` dans `site/assets/responsive.css` (idï¿½alement sous le bloc mobile).
 
-## Responsive — updates
+## Responsive ï¿½ updates
 
 - Mobile menu: overlay panel under the fixed bar. Adds console logs: "[nav] init" and "[nav] toggle clicked / open state". Global helper: window.__pmpaToggleNav().
 - Desktop contacts: legacy mailto/tel anchors from Wix are hidden site-wide on desktop; only the contact strip in the top bar remains visible. (CSS in site/assets/responsive.css)

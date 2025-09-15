@@ -9,9 +9,14 @@ import Timeline from "../components/Timeline.astro";
 import Quote from "../components/Quote.astro";
 import linkedin from "../assets/logo_linkedin.webp";
 import portrait from "../assets/maud_pozza.jpg";
+import psy_bureau from "../assets/psy_bureau.jpg";
+import muret from "../assets/muret.jpg";
+import kaplas from "../assets/kaplas.jpg";
+import fam_foret from "../assets/famille_foret.jpg";
+import pot_crayon from "../assets/pot_crayon.jpg";
+import consul_enf from "../assets/dessin_consult_enfant.jpeg";
 
 // Contenu Markdown (copié depuis DOCS/CONTENU.md en fichiers séparés)
-import S1 from "../content/home/section-1.md";
 import S2 from "../content/home/section-2.md";
 import S3 from "../content/home/section-3.md";
 import S4a from "../content/home/section-4a.md";
@@ -32,14 +37,15 @@ import S12 from "../content/home/section-12.md";
   <!-- Hero (Info essentiels + image cabinet) -->
   <Hero />
 
-  <!-- Section 1 -->
-  <Section id="intro" title="POZZA Maud Psychologue">
-    <S1 />
-  </Section>
-
   <!-- Section 2 -->
   <Section id="quand-consulter" title="Quand consulter un psychologue ?">
-    <S2 />
+    <div class="grid gap-6 md:grid-cols-3 items-start">
+      <div class="md:col-span-1">
+        <img src={psy_bureau.src} alt="Quand consulter un Psychologue" class="w-80 h-64 object-cover rounded-full shadow-md" loading="lazy" />
+      </div>
+      <div class="md:col-span-2">
+        <S2 />
+      </div>
   </Section>
 
   <!-- Section 3 -->
@@ -54,16 +60,40 @@ import S12 from "../content/home/section-12.md";
   <!-- Section 4 : 2 cartes -->
   <Section id="suivi" title="Suivi psychologique">
     <div class="grid gap-6 md:grid-cols-2">
-      <Card title="Suivi psychologique enfant"><S4a /></Card>
-      <Card title="Suivi psychologique adolescent"><S4b /></Card>
+      <Card 
+        title="Suivi psychologique enfant" 
+        img={kaplas.src}
+        alt="Psychologue pour enfants à Angers"
+      >
+        <S4a />
+      </Card>
+      <Card 
+        title="Suivi psychologique adolescent" 
+        img={muret.src}
+        alt="Psychologue pour adolescents à Angers"
+      >
+        <S4b />
+      </Card>
     </div>
   </Section>
 
   <!-- Section 5 : 2 cartes -->
   <Section id="psychopedagogie" title="Psychopédagogie & Parentalité">
     <div class="grid gap-6 md:grid-cols-2">
-      <Card title="Psychopédagogie"><S5a /></Card>
-      <Card title="Accompagnement à la parentalité"><S5b /></Card>
+      <Card 
+        title="Psychopédagogie" 
+        img={pot_crayon.src}
+        alt="Psychologue pour enfants à Angers"
+      >
+        <S5a />
+      </Card>
+      <Card 
+        title="Accompagnement à la parentalité" 
+        img={fam_foret.src}
+        alt="Psychologue pour adolescents à Angers"
+      >
+        <S5b />
+      </Card>
     </div>
   </Section>
 
@@ -71,8 +101,14 @@ import S12 from "../content/home/section-12.md";
   <Section id="formation-pro" title="Formation professionnelle — Ce qui me distingue">
     <S6 />
     <div class="mt-4">
-      <a class="chip chip-icon opacity-90" href="https://fr.linkedin.com/in/maud-pozza-3a729a15b" target="_blank" rel="me noopener" aria-label="Profil LinkedIn">
-        <img src={linkedin.src} alt="LinkedIn" />
+      <a 
+        class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 shadow-md" 
+        href="https://fr.linkedin.com/in/maud-pozza-3a729a15b" 
+        target="_blank" 
+        rel="me noopener" 
+        aria-label="Profil LinkedIn"
+      >
+        <img src={linkedin.src} alt="LinkedIn" class="w-5 h-5" />
       </a>
     </div>
   </Section>
@@ -89,7 +125,7 @@ import S12 from "../content/home/section-12.md";
   <Section id="bio" title="Qui suis-je ?">
     <div class="grid gap-6 md:grid-cols-3 items-start">
       <div class="md:col-span-1">
-        <img src={portrait.src} alt="Maud Pozza – Psychologue" class="w-full h-auto rounded-2xl shadow-md" loading="lazy" />
+        <img src={portrait.src} alt="Maud Pozza – Psychologue" class="w-90 h-90 object-cover rounded-full shadow-md" loading="lazy" />
       </div>
       <div class="md:col-span-2">
         <S8 />
@@ -98,10 +134,15 @@ import S12 from "../content/home/section-12.md";
   </Section>
 
   <!-- Section 9 : citation -->
-  <Section id="citation" title="Citation">
-    <Quote author="Carl Rogers – psychologue humaniste">
-      <S9 />
-    </Quote>
+  <Section id="citation" title=" ">
+    <div class="grid gap-6 md:grid-cols-3 items-start">
+      <div class="md:col-span-1">
+        <img src={consul_enf.src} alt="consultation enfant" class="w-full h-64 object-cover rounded-xl shadow-md" loading="lazy" />
+      </div>
+      <Quote class="md:col-span-2" author="Carl Rogers – psychologue humaniste">
+        <S9 />
+      </Quote>
+    </div>
   </Section>
 
   <!-- Section 10 : horaires -->
